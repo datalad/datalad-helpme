@@ -23,14 +23,12 @@ Here is an example of submitting without a token (meaning the browser url is ope
 must click submit. This is done simply by not exporting `HELPME_GITHUB_TOKEN` to the environment.
 
 ```python
-from helpme.main import get_helper
 from datalad.utils import swallow_outputs
 from datalad.api import wtf
 import sys
 
 repo = "datalad/datalad-helpme"
 title = "Test issue opened manually by helpme"
-helper = get_helper(name="github")
 
 with swallow_outputs() as cmo:
     wtf(decor="html_details")
@@ -55,5 +53,7 @@ issue = helper.run_headless(repo=repo, body=body, title=title)
 ```
 
 The above will still require confirmation to send the user environment,
-and then will post the issue to `datalad/datalad-support`. The user
-can fill in the sections to complete the issue.
+and then will post the issue to `datalad/datalad-support`. If there is no GitHub
+token provided in the environment, the user can fill in the sections to complete the issue.
+Otherwise, the issue could be submit automatically and the response from the GitHub
+API would be returned.
