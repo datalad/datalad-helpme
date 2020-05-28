@@ -8,7 +8,7 @@ jobs:
   parseIssue:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Setup python environment
         run: conda create --quiet --name helpme
       - name: Derive Issue Data
@@ -17,7 +17,9 @@ jobs:
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate helpme
-          python .github/parse_issue.py
+          wget https://github.com/datalad/datalad-helpme/blob/17eac96a2692bd05a87b07c42e83d4bf28983ce7/.github/parse_issue.py
+          chmod +x parse_issue.py
+          python parse_issue.py
       - name: Update Upstream Branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
