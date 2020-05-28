@@ -17,7 +17,7 @@ jobs:
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate helpme
-          wget https://github.com/datalad/datalad-helpme/blob/17eac96a2692bd05a87b07c42e83d4bf28983ce7/.github/parse_issue.py
+          wget https://raw.githubusercontent.com/datalad/datalad-helpme/f650c28f3d949c40dfcb5cf62306cd9301bb219d/.github/parse_issue.py
           chmod +x parse_issue.py
           python parse_issue.py
       - name: Update Upstream Branch
