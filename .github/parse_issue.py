@@ -30,21 +30,27 @@ if not issue:
 body = issue["body"]
 
 # First find the identifier - an md5 hash sum
-identifier = re.search("HelpMe Github Issue: (?P<name>md5.+)", body)
+identifier = re.search("HelpMe Github Issue: (?P<name>.+)", body)
 try:
-    md5 = identifier.groups()[0]
+    identifier = identifier.groups()[0]
 except:
     sys.exit("Error parsing md5 identifier")
 
+# Parse the identifier into folder structure
+parts = identifier.split('-')
+exception_name = parts.pop(0)
+others_md5 = "-".join(parts[0:2])
+datalad_md5 = "-".join(parts[2:4])
+
 # Write the new issue to file, named by the md5
 output_dir = os.path.join(root, "issues")
-issue_dir = os.path.join(output_dir, md5)
+issue_dir = os.path.join(output_dir, exception_name, others_md5, datalad_md5)
 
 exists = True
 for outdir in [output_dir, issue_dir]:
     if not os.path.exists(outdir):
         exists = False
-        os.mkdir(outdir)
+        os.makedirs(outdir)
 
 # For a simple organization, we will store the body of content in a file named
 # by the issue number.
