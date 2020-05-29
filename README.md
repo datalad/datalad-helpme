@@ -42,18 +42,46 @@ with swallow_outputs() as cmo:
 %s""" % cmo.out
 ```
 
-We will want to add a hash of the problem to this, for the CI to check if the issue
-has been previously opened.
 
-Next, let's run the helper headlessly. Note that this will currently still confirm the
+## Identifier
+
+DataLad is set up to, when submitting an issue using code similar to the above,
+generate it's own identifier that looks like the following:
+
+```
+Exception-others-<md5>-datald-<md5>
+```
+
+Where the components include:
+
+ - the exception class name
+ - an md5 of the list of other modules in the stack trace
+ - an md5 o the datalad modules in the stack trace
+
+And then the [GitHub workflow](.github/workflows/report_issue.yml) generates a folder
+structure that has the same format:
+
+```
+issues/
+   Exception/
+     others-md5
+       datald-md5
+```
+
+And the CI checks if the issue has been previously opened based on these identifiers.
+
+## Submit
+
+Next, here is an example of running the helper headlessly. Note that this will currently still confirm the
 environment variables being sent from the user.
 
 ```python
-issue = helper.run_headless(repo=repo, body=body, title=title)
+identifier = "Exception-others-<md5>-datald-<md5>"
+issue = helper.run_headless(repo=repo, body=body, title=title, identifier=identifier, generate_md5=False)
 ```
 
 The above will still require confirmation to send the user environment,
-and then will post the issue to `datalad/datalad-support`. If there is no GitHub
+and then will post the issue to `datalad/datalad-helpme`. If there is no GitHub
 token provided in the environment, the user can fill in the sections to complete the issue.
 Otherwise, the issue could be submit automatically and the response from the GitHub
 API would be returned.
